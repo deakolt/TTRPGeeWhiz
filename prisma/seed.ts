@@ -38,20 +38,20 @@ export default function seedRpg() {
 	})
 }
 
-// export default async function seedCount() {
-// 	const rpgs: Rpg[] = await prisma.rpgs()
+export default async function seedCount() {
+	const rpgs: Rpg[] = await prisma.rpgs()
 
-// 	rpgs.forEach(async rpg => {
-// 		for (let i = 0; i < countsPerRpg; i++) {
-// 			await prisma.rpg.create({
-// 				data: {
-// 					count: Math.floor(Math.random() * (minSubscribers + maxSubscribers) / 2),
-// 					rpg: rpg
-// 				}
-// 			})
-// 		}
-// 	})
-// }
+	rpgs.forEach(async rpg => {
+		for (let i = 0; i < countsPerRpg; i++) {
+			await prisma.rpg.create({
+				data: {
+					count: Math.floor(Math.random() * (minSubscribers + maxSubscribers) / 2),
+					rpg: rpg
+				}
+			})
+		}
+	})
+}
 
 main()
 	.catch(e => {
