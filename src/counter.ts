@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import prisma from './db/client'
+import prisma from '../prisma/client'
 
 async function main() {
 	const allRpgs = await prisma.rpg.findMany()
