@@ -21,6 +21,8 @@ Hotness: NLP on LFG and RPG
 	- `npx prisma db seed --preview-feature`
 - Reset DB, Create new DB, Run Migrations, Run Seed Scripts:
 	- `npx prisma migrate reset`
+- Debug:
+	- `export DEBUG="*"`
 
 ### Reddit API
 
