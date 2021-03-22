@@ -20,14 +20,14 @@ async function main() {
 	console.log('seeded')
 
 	console.log('seeding Count table')
-	// seedCount()
+	seedCount()
 	console.log('seeded')
 
 	console.log('finished seed')
 
 }
 
-export default function seedRpg() {
+function seedRpg() {
 	rpgs.forEach(async rpg => {
 		await prisma.rpg.create({
 			data: {
@@ -38,15 +38,15 @@ export default function seedRpg() {
 	})
 }
 
-export default async function seedCount() {
-	const rpgs: Rpg[] = await prisma.rpgs()
+async function seedCount() {
+	const rpgs = await prisma.rpg.findMany()
 
 	rpgs.forEach(async rpg => {
 		for (let i = 0; i < countsPerRpg; i++) {
-			await prisma.rpg.create({
+			await prisma.count.create({
 				data: {
 					count: Math.floor(Math.random() * (minSubscribers + maxSubscribers) / 2),
-					rpg: rpg
+					rpg: { connect: rpg }
 				}
 			})
 		}
