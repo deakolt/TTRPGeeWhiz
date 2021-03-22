@@ -5,9 +5,9 @@ const minSubscribers: number = 1000
 const maxSubscribers: number = 1000000
 
 export default async function seedCount() {
-	const Rpgs: Rpg[] = await prisma.rpgs()
+	const rpgs: Rpg[] = await prisma.rpgs()
 
-	allRpgs.forEach(async rpg => {
+	rpgs.forEach(async rpg => {
 		for (let i = 0; i < countsPerRpg; i++) {
 			await prisma.rpg.create({
 				data: {
