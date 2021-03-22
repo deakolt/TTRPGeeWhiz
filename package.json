@@ -1,0 +1,6 @@
+{
+	"prisma.schema": "./src/db/schema.prisma",
+	"dependencies": {
+		"axios": "^0.21.1"
+	}
+}
