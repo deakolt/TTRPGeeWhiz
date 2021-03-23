@@ -1,39 +1,37 @@
 import axios from 'axios'
 
+import getSubredditCount from './reddit'
 import prisma from '../prisma/client'
 
 async function main() {
-	const allRpgs = await prisma.rpg.findMany()
+	const rpgs = await prisma.rpg.findMany()
 
-	allRpgs.forEach(rpg => {
-		const subreddit: string = rpg.subreddit
+	const creationPromises: Promise<any>[] = []
+	await Promise.all(rpgs.map(async rpg => {
+		const count: number = await getSubredditCount(rpg.subreddit)
 
-		const count: number = fetchSubredditCount(subreddit)
+		creationPromises.push(saveSubredditCount(rpg.id, count))
+	}))
 
-		saveSubredditCount(rpg, count)
-	})
+	await Promise.all(creationPromises)
 }
 
-function fetchSubredditCount(subreddit: string): number {
-	axios.get('URL')
-		.then(response => {
-			console.log('successfully fetched subreddit count')
-			return response['subscriberNumber']
-		})
-		.catch(error => {
-			// TODO: server log error
-			console.log(error)
-			throw(error)
-		})
-}
-
-async function saveSubredditCount(rpg: any, count: number) {
+async function saveSubredditCount(rpgId: number, count: number) {
 	const savedCount = await prisma.count.create({
 		data: {
-			rpg: rpg,
+			rpgId: rpgId,
 			count: count
 		}
 	})
 
-	console.log(`Counted ${count} subscribers for ${rpg.name}`)
+	console.log(`Counted ${count} subscribers for ${rpgId}`)
 }
+
+main()
+	.catch(e => {
+		console.error(e)
+		process.exit(1)
+	})
+	.finally(async () => {
+		await prisma.$disconnect()
+	})
