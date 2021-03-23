@@ -18,22 +18,21 @@ async function main() {
 }
 
 async function seedRpg() {
-	rpgs.forEach(async rpg => {
-		const wtf = await prisma.rpg.create({
+	await Promise.all(rpgs.map(rpg => {
+		return prisma.rpg.create({
 			data: {
 				name: rpg.name,
 				subreddit: rpg.subreddit
 			}
 		})
-	})
+	}))
 }
 
 async function seedCount() {
 	const rpgs = await prisma.rpg.findMany({ select: { id: true }})
 
-	rpgs.forEach(async rpg => {
-		const creationPromises = []
-
+	const creationPromises: Promise<any>[] = []
+	rpgs.forEach(rpg => {
 		for (let i = 0; i < countsPerRpg; i++) {
 			creationPromises.push(prisma.count.create({
 				data: {
@@ -42,9 +41,9 @@ async function seedCount() {
 				}
 			}))
 		}
-
-		Promise.all(creationPromises)
 	})
+
+	await Promise.all(creationPromises)
 }
 
 main()
