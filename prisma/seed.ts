@@ -12,12 +12,12 @@ const minSubscribers: number = 1000
 const maxSubscribers: number = 1000000
 
 async function main() {
-	seedRpg()
+	await seedRpg()
 
-	seedCount()
+	await seedCount()
 }
 
-function seedRpg() {
+async function seedRpg() {
 	rpgs.forEach(async rpg => {
 		const wtf = await prisma.rpg.create({
 			data: {
@@ -25,8 +25,6 @@ function seedRpg() {
 				subreddit: rpg.subreddit
 			}
 		})
-
-		console.log(wtf)
 	})
 }
 
@@ -34,14 +32,18 @@ async function seedCount() {
 	const rpgs = await prisma.rpg.findMany({ select: { id: true }})
 
 	rpgs.forEach(async rpg => {
+		const creationPromises = []
+
 		for (let i = 0; i < countsPerRpg; i++) {
-			await prisma.count.create({
+			creationPromises.push(prisma.count.create({
 				data: {
 					count: Math.floor(Math.random() * (minSubscribers + maxSubscribers) / 2),
 					rpgId: rpg.id
 				}
-			})
+			}))
 		}
+
+		Promise.all(creationPromises)
 	})
 }
 
