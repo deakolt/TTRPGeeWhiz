@@ -27,19 +27,35 @@ class Reddit {
 	}
 
 	async getAccessToken() {
+		axios.interceptors.request.use(request => {
+		  console.log('Starting Request', JSON.stringify(request, null, 2))
+		  return request
+		})
+
+		// axios.interceptors.response.use(response => {
+		//   // console.log('Response:', JSON.stringify(response, null, 2))
+		//   return response
+		// })
+
+
 		const response = await axios.post(
 			'https://www.reddit.com/api/v1/access_token',
 			{
+				headers: {
+					'User-Agent': 'web:ttrpgeewhiz:v0.0.0 (by /u/MushOnline)'
+				},
 				auth: {
 					username: this.clientId,
 					password: this.clientSecret
 				},
-				params: {
+				data: {
 					grant_type: 'password',
 					username: this.username,
 					password: this.password,
-				}
-			})
+				},
+			}
+		)
+
 
 		console.log(response)
 		if (!response) {

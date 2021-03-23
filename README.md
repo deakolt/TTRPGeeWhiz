@@ -27,7 +27,7 @@ Hotness: NLP on LFG and RPG
 ### Reddit API
 
 -  https://www.reddit.com/prefs/apps
--  curl -X POST -d 'grant_type=password&username=ASDF&password=JKL' --user 'ID:SECRET' https://www.reddit.com/api/v1/access_token
+-  curl -X POST -d 'grant_type=password&username=ASDF&password=JKL' --user 'ID:SECRET' --user-agent 'web:ttrpgeewhiz:v0.0.0 (by /u/MushOnline)' https://www.reddit.com/api/v1/access_token
 - {"access_token": "TOKEN", "token_type": "bearer", "expires_in": 3600, "scope": "*"}%
 
 ### Architecture
