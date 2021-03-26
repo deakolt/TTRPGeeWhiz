@@ -1,15 +1,18 @@
+import fs from 'fs'
 import prisma from './client'
-
-const rpgs = [
-	{ name: 'Call of Cthulhu', subreddit: 'callofcthulhu' },
-	{ name: 'Dungeons & Dragons', subreddit: 'DnD' },
-	{ name: 'Mouse Guard', subreddit: 'MouseGuard' },
-	{ name: 'Warhammer Fantasy Roleplaying', subreddit: 'warhammerfantasyrpg' },
-]
 
 const countsPerRpg: number = 10
 const minSubscribers: number = 1000
 const maxSubscribers: number = 1000000
+
+type JSONRpg = {
+	name: string
+	subreddit: string
+}
+
+function isJSONRpg(object: any): object is JSONRpg {
+	return "name" in object && "subreddit" in object
+}
 
 async function main() {
 	await seedRpg()
@@ -18,11 +21,19 @@ async function main() {
 }
 
 async function seedRpg() {
+	const rpgs = JSON.parse(fs.readFileSync('./data/rpgs.json', 'utf8')) as JSONRpg[]
+
 	await Promise.all(rpgs.map(rpg => {
+		let jsonRpg = rpg as JSONRpg
+
+		if (!isJSONRpg(jsonRpg)) {
+			throw Error(`invalid rpg JSON: ${JSON.stringify(rpg)}`)
+		}
+
 		return prisma.rpg.create({
 			data: {
-				name: rpg.name,
-				subreddit: rpg.subreddit
+				name: jsonRpg.name,
+				subreddit: jsonRpg.subreddit
 			}
 		})
 	}))
