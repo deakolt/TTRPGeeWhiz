@@ -7,6 +7,8 @@ Subreddit Popularity: Daily Cron
 
 Hotness: NLP on LFG and RPG
 
+Discords by TTRPG
+
 ### Dev Setup
 - `mysql.server start`
 - `npx prisma migrate dev --name init --schema ./src/db/schema.prisma`
