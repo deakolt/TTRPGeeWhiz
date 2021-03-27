@@ -1,7 +1,7 @@
 import fs from 'fs'
 import prisma from './client'
 
-const countsPerRpg: number = 10
+const countsPerRpg: number = 14
 const minSubscribers: number = 1000
 const maxSubscribers: number = 1000000
 
@@ -45,10 +45,13 @@ async function seedCount() {
 	const creationPromises: Promise<any>[] = []
 	rpgs.forEach(rpg => {
 		for (let i = 0; i < countsPerRpg; i++) {
+			const date = new Date()
+			date.setDate(date.getDate() - i)
 			creationPromises.push(prisma.count.create({
 				data: {
 					count: Math.floor(Math.random() * (minSubscribers + maxSubscribers) / 2),
-					rpgId: rpg.id
+					rpgId: rpg.id,
+					createdAt: date
 				}
 			}))
 		}
