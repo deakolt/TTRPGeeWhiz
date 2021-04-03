@@ -1,4 +1,4 @@
-import fs from 'fs'
+import * as fs from 'fs'
 import prisma from './client'
 
 const countsPerRpg: number = 14
